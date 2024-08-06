@@ -251,7 +251,7 @@ function checkstatus($viewtype, $competence, $percenttotal , $session)
   <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
+            <h5 class="modal-title">Add Online user</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -272,11 +272,16 @@ function checkstatus($viewtype, $competence, $percenttotal , $session)
                 <input type="text" class="form-control" id="password" placeholder="Your Activation Code" Required>
             </div>
 
+            <div class="form-group">
+                <label for="useremail">Email</label>
+                <input type="text" class="form-control" id="useremail" placeholder="Your Activation Code" Required>
+            </div>
+
 
              <div class="form-group">
-           <label for="expirationdate">Expiration Date</label>
-          <input type="text" class="form-control" id="expirationdate" placeholder="Enter the Exam Date" Required>
-          </div>
+            <label for="expirationdate">Expiration Date</label>
+            <input type="text" class="form-control" id="expirationdate" placeholder="Enter the Exam Date" Required>
+            </div>
 
      <div class="form-group">
            <label for="viewtype">Select Type</label>
@@ -296,7 +301,7 @@ function checkstatus($viewtype, $competence, $percenttotal , $session)
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-primary" onclick="functionsave()">Save</button>
       </div>
     </div>
   </div>
@@ -328,6 +333,7 @@ function checkstatus($viewtype, $competence, $percenttotal , $session)
         <th>Review</th>
         <th>Expiration Date</th>
         <th>Remaining</th>
+        <th>Option</th>
       </tr>
     </thead>
     <tbody id="reloadpage">
@@ -349,20 +355,151 @@ function checkstatus($viewtype, $competence, $percenttotal , $session)
 
   function showtable()
   {
-    $.post("onlineaccounts_table.php",
-    {
+      $.post("onlineaccounts_table.php",
+      {
 
-    },function(result)
+      },function(result)
+      {
+        $("#reloadpage").empty()
+        $("#reloadpage").append(result)
+      }
+      )
+  }
+
+
+  function functionsave()
+  {
+
+    if(validation())
     {
-      $("#reloadpage").empty()
-      $("#reloadpage").append(result)
+      $.post("onlineaccounts_save.php",
+      {
+        completename: $("#completename").val(),
+        username: $("#username").val(),
+        useremail: $("#useremail").val(),
+        password: $("#password").val(),
+        expirationdate: $("#expirationdate").val(),
+        viewtype: $("#viewtype").val()
+      },function(result)
+      {
+        if(result==1)
+        {
+          $("#modelId").modal("hide")
+         showtable() 
+        }
+      })  
     }
-  )
+ 
   }
 
   function validation()
   {
-    
+    let proceed = true
+    let mytext = ""
+
+    mytext =  "completename"
+    if(document.getElementById(mytext).value=="")
+    {
+     proceed = false
+     document.getElementById(mytext).className = "form-control border border-danger" 
+    }
+    else 
+    {
+      document.getElementById(mytext).className = "form-control" 
+    }
+
+
+    mytext =  "username"
+    if(document.getElementById(mytext).value=="")
+    {
+     proceed = false
+     document.getElementById(mytext).className = "form-control border border-danger" 
+    }
+    else 
+    {
+      document.getElementById(mytext).className = "form-control" 
+    }
+
+    mytext =  "password"
+    if(document.getElementById(mytext).value=="")
+    {
+     proceed = false
+     document.getElementById(mytext).className = "form-control border border-danger" 
+    }
+    else 
+    {
+      document.getElementById(mytext).className = "form-control" 
+    }
+
+    mytext =  "expirationdate"
+    if(document.getElementById(mytext).value=="")
+    {
+     proceed = false
+     document.getElementById(mytext).className = "form-control border border-danger" 
+    }
+    else 
+    {
+      document.getElementById(mytext).className = "form-control" 
+    }
+
+    mytext =  "viewtype"
+    if(document.getElementById(mytext).value=="")
+    {
+     proceed = false
+     document.getElementById(mytext).className = "form-control border border-danger" 
+    }
+    else 
+    {
+      document.getElementById(mytext).className = "form-control" 
+    }
+
+    mytext =  "useremail"
+    if(document.getElementById(mytext).value=="")
+    {
+     proceed = false
+     document.getElementById(mytext).className = "form-control border border-danger" 
+    }
+    else 
+    {
+      document.getElementById(mytext).className = "form-control" 
+    }
+
+
+
+
+    return proceed
+  
+  }
+
+  function deleteshow(id,valuename)
+  {
+    let myid = id
+    Swal.fire({
+      title: 'Delete?',
+      text: 'Do you want to Delete? ' + valuename,
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Proceed'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.post("onlineaccounts_delete.php",
+        {
+          id: myid
+        },function(result)
+        {
+          if(result==1)
+        {
+          showtable()
+        }
+        else 
+        {
+          console.log(result)
+        }
+        })
+      }
+    })
   }
 
 

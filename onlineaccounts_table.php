@@ -14,16 +14,21 @@ if(!mysqli_error($con))
 
         while($rows = mysqli_fetch_assoc($dbt))
         {
+        @$id = $rows['ID'];
+        @$completename = $rows['completename'];
         @$count +=1;
 ?>
             <tr>
                 <td><?php echo $count; ?></td>
-                <td><?php echo $rows['completename']; ?></td>
+                <td><?php echo $completename; ?></td>
                 <td><?php echo $rows['username']; ?></td>
                 <td><?php echo $rows['password']; ?></td>
                 <td><?php echo $rows['viewtype']; ?></td>
                 <td><?php echo loadregistrationtocompletedate($rows['expirationdate'])?></td>
-                <td><?php echo $rows['remdays'];?></td>
+                <td><?php echo $rows['remdays'];?> Day's</td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteshow('<?php echo $id; ?>','<?php echo $completename; ?>')">Delete</button>
+                </td>
             </tr>
 
 <?php
