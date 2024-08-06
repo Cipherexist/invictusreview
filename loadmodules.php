@@ -11,6 +11,21 @@ function setcookiecompetence($competence)
     return $_COOKIE['competence'];
     
 }
+
+function loadregistrationformat_monthfirst($mydate)
+{
+    $format = $mydate;
+    //explode the date to get month, day and year
+    $seperate = explode("/", $format);
+    //get age from date or birthdate
+    $month = $seperate[0];
+    $day = $seperate[1];
+    $year =  $seperate[2]; 
+    $result = $year . $month . $day; 
+    return $result; 
+}
+
+
 function loadcompletetrainingdate($classno)
 {
 		$fdate =""; 

@@ -40,6 +40,10 @@ function loaduseraccesstype($username)
                </li>';
 
                echo   '<li class="nav-item">
+               <a class="nav-link" href="onlineaccounts.php">Online Accounts<span class="sr-only"></span></a>
+                </li>';
+
+               echo   '<li class="nav-item">
                <a class="nav-link" href="accounts.php">Activated Account <span class="sr-only"></span></a>
                 </li>';
 
