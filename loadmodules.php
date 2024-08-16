@@ -12,6 +12,28 @@ function setcookiecompetence($competence)
     
 }
 
+
+  
+
+function lastlogin($usernameme)
+{
+  include 'dbconfig.php';
+  $codecomplete = ""; 
+  $query = "Select * from examuseraccess Where username Like '". $usernameme. "'";
+    $datame = mysqli_query($con, $query);
+    if(mysqli_num_rows($datame)!=0)
+    {
+     while ($row3 = mysqli_fetch_array($datame, MYSQLI_ASSOC)) {
+        
+      $codecomplete = $row3['lastlogin']; 
+     }
+    }
+    
+      return $codecomplete;
+}
+
+
+
 function loadregistrationformat_monthfirst($mydate)
 {
     $format = $mydate;

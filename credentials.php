@@ -80,11 +80,11 @@ $numrows=mysqli_num_rows($result);
 	 if(loaduseraccesstype($_POST['usname'])=='Admin')
             {
 echo '	<script> 
-window.location.replace("registeruser.php");
+window.location.replace("accounts.php?content=activatedaccount");
 </script> 
 	';
             }
-            else
+            else	
             {
             	echo '	<script> 
 window.location.replace("index.php");

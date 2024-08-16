@@ -1,24 +1,24 @@
-    	<table class="table table-striped table-bordered mydatatable" style="width: 100%"> 
-    	
-    	<thead>
-        <tr>
-        <th> No </th>
-        <th> Registered User </th>
-        <th> Activation Code </th>
-  	    <th> Viewtype </th>
-        <th> Valid </th>
-          <th> Date Created </th>
-			 <th> App registered </th>
-			   <th> LastLogin </th>
-			    <th> Access </th>
-			 	 <th> FUNCTION </th>
-        </tr>
-        </thead>
-        
-        <tbody>
+
       <?php 
   include 'dbconfig.php';
-  $fetchqry  = "SELECT * FROM `examapproved` Where hide Like '' ORDER BY ID DESC"; 
+  include 'loadmodules.php'; 
+
+  @$searchvalue = ""; 
+
+  if(isset($_POST['searchvalue']))
+  {
+    $searchvalue = $_POST['searchvalue']; 
+  }
+ 
+  if($searchvalue=="")
+  {
+    $fetchqry  = "SELECT * FROM `examapproved` ORDER BY ID DESC LIMIT 100"; 
+  }
+  else 
+  {
+    $fetchqry  = "SELECT * FROM `examapproved` Where `usernameusage` Like '%$searchvalue%' ORDER BY ID DESC"; 
+  }
+ 
   $datame1 = mysqli_query($con,$fetchqry);
   $numrows=mysqli_num_rows($datame1);
   $x = 0; 
@@ -32,6 +32,8 @@
       //  setcookie('username', $row["username"], time()+$setlimit);
       //  setcookie('viewtype', $row["viewtype"], time()+$setlimit);
 //setcookie('completename', $row["completename"], time()+$setlimit);
+
+    @$myid = $row['ID'];
    $x = $x +1; 
    if($row["status"]=='yes')
    {
@@ -45,22 +47,46 @@
 	echo "<td> ". $row["password"] . "</td>"; 
 	echo "<td> ". $row["viewtype"] . "</td>"; 
     echo "<td> ". $row["status"] . "</td>"; 
-		echo "<td> ". $row["datecreated"] . "</td>"; 
+		echo "<td> ". loadregistrationtocompletedate($row["datecreated"]) . "</td>"; 
 	echo "<td> ". $row["dateactivated"] . "</td>";
 		echo "<td> ". lastlogin($row["usernameusage"])  . "</td>"; 
 	$myusername = "'". $row["usernameusage"] . "'"; 
-		echo "<td> ". $row["controlstatus"] . "</td>";
-	echo '<td> <input type="button" id="driver" value="Deactivate" class="btn btn-sm btn-danger" onClick="deleteme('. $myusername. ');"/>' . '</td>';
-	echo "</tr>"; 
+
+  if( $row["expdate"] ==NULL)
+  {
+    echo "<td>Unlimited</td>";
+  }
+  else 
+  {
+    echo "<td> ". loadregistrationtocompletedate($row["expdate"]) . "</td>";
+  }
+
+	echo "<td> ". $row["controlstatus"] . "</td>";
+    if( $row["accounttype"] ==NULL)
+    {
+      echo "<td>OFFLINE</td>";
+    }
+    else 
+    {
+      echo "<td> ". $row["accounttype"] . "</td>";
+    }
+  ?>
+
+	<td> <input type="button" id="driver" value="Deactivate" class="btn btn-sm btn-danger" onclick="deleteme(<?php echo $myusername ?>)"/>
+	 <input type="button" id="driver" style="margin-top: 5px;" value="Delete" class="btn btn-sm btn-danger" onclick="deleteshow(<?php echo $myid; ?>,<?php echo $myusername ?>)"/></td>
+	
+  <?php 
+  echo "</tr>"; 
 	}
 	
   }
+  else 
+  {
+   echo "No Results";
+  }
+
+ 
+
 	
       ?> 
 
-    
-
-</tbody>
-
-
-    </table>

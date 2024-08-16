@@ -35,88 +35,96 @@ function loaduseraccesstype($username)
       <?php
             if(loaduseraccesstype($_COOKIE['usname'])=='Admin')
             {
-              echo   '<li class="nav-item">
-              <a class="nav-link" href="enrollment.php">Enrollment <span class="sr-only"></span></a>
-               </li>';
+      ?>    
+               <li class="nav-item">
+               <a class="nav-link <?php if($_GET['content']=='activatedaccount'){echo 'active';}?>" href="accounts.php?content=activatedaccount">Activated Account <span class="sr-only"></span></a>
+                </li>
+                
+              <li class="nav-item">
+              <a class="nav-link <?php if($_GET['content']=='enrollment'){echo 'active';}?>" href="enrollment.php?content=enrollment">Enrollment <span class="sr-only"></span></a>
+               </li>
 
-               echo   '<li class="nav-item">
-               <a class="nav-link" href="onlineaccounts.php">Online Accounts<span class="sr-only"></span></a>
-                </li>';
+               <li class="nav-item">
+               <a class="nav-link <?php if($_GET['content']=='onlineaccount'){echo 'active';}?>" href="onlineaccounts.php?content=onlineaccount">Preboard Online Accounts<span class="sr-only"></span></a>
+                </li>
 
-               echo   '<li class="nav-item">
-               <a class="nav-link" href="accounts.php">Activated Account <span class="sr-only"></span></a>
-                </li>';
-
-               echo   '<li class="nav-item">
-               <a class="nav-link" href="registeruserapp.php">Register New App <span class="sr-only"></span></a>
-                </li>';
-        
-      // echo  '       <li class="nav-item dropdown">
-      //         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      //           Registration
-      //           </a>
-      //          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-      //          <a class="dropdown-item" href="registeruser.php">Online User</a>
-      //          <a class="dropdown-item" href="registeruserapp.php">App User</a>
-      //         </div>
-      //       </li> ';
       
-      echo ' <li class="nav-item dropdown">
-               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Manage Accounts
-             </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-               <a class="dropdown-item" href="accessability2.php">Android Accounts</a>
-                 <a class="dropdown-item" href="preboardaccounts2.php">Preboard Accounts</a>
-               </div>
-           </li> ';
+
+               <li class="nav-item">
+               <a class="nav-link <?php if($_GET['content']=='registernewapp'){echo 'active';}?>" href="registeruserapp.php?content=registernewapp">Register New App <span class="sr-only"></span></a>
+                </li>
+                
+                    <!-- <li class="nav-item dropdown">
+                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           Registration
+                           </a>
+                          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <a class="dropdown-item" href="registeruser.php">Online User</a>
+                          <a class="dropdown-item" href="registeruserapp.php">App User</a>
+                         </div>
+                       </li>  -->
+                       
+                                  <!-- <li class="nav-item dropdown">
+                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           Manage Accounts
+                       </a>
+                           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                         <a class="dropdown-item" href="accessability2.php">Android Accounts</a>
+                           <a class="dropdown-item" href="preboardaccounts2.php">Preboard Accounts</a>
+                         </div>
+                     </li> -->
       
-      /*
-      echo '       <li class="nav-item">
+  
+           <!-- <li class="nav-item">
               <a class="nav-link" href="monitoring.php">Monitoring</a>
-           </li> ';
-      
-      echo '        <li class="nav-item">
+           </li>  -->
+<!--       
+         <li class="nav-item">
                 <a class="nav-link" href="rankings.php">TOP Scores</a>
-              </li>';
-       */       
-      echo '        <li class="nav-item">
+              </li> -->
+
+              
+               <li class="nav-item">
                 <a class="nav-link" href="logout.php">Logout</a>
-              </li>';              
+              </li>               
               
-              
+          
+        <?php
             }
             
             else 
             {
-      echo   '<li class="nav-item active">
-             <a class="nav-link" href="preboard.php">Home <span class="sr-only">(current)</span></a>
-              </li>';
+
+          ?>
+
+            <li class="nav-item active">
+               <a class="nav-link" href="preboard.php">Home <span class="sr-only">(current)</span></a>
+              </li>
         
       
-      echo '       <li class="nav-item">
+     <li class="nav-item">
               <a class="nav-link" href="preboard.php">Preboard and Review</a>
-           </li> ';
+           </li>
       
-      
-      echo '       <li class="nav-item">
+          <li class="nav-item">
               <a class="nav-link" href="mypendings.php">Check Pendings</a>
-           </li> ';
+           </li>
       
-      echo '       <li class="nav-item">
+          <li class="nav-item">
               <a class="nav-link" href="scores.php">Your Sessionss</a>
-           </li> ';
+           </li>
       
       
-      echo '        <li class="nav-item">
+         <li class="nav-item">
                 <a class="nav-link" href="rankings.php">TOP Scores</a>
-              </li>';
+              </li>
               
-      echo '        <li class="nav-item">
+      <li class="nav-item">
                 <a class="nav-link" href="logout.php">logout</a>
-              </li>';              
+              </li>              
                               
-                
+      <?php
+
             }
       
       ?>

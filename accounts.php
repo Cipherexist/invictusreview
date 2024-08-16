@@ -63,7 +63,7 @@ require 'forcookie2.php';
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
-<!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
 <script src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -76,10 +76,13 @@ require 'forcookie2.php';
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js"></script>	
 
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 <!--DATA PICKER --> 
-
-   <!--  <link rel="stylesheet" href="css/style.css"> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"></script> 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js"></script>	
+	
+	
+    <link rel="stylesheet" href="css/style.css">
   
   </head>
 
@@ -91,17 +94,97 @@ require 'forcookie2.php';
 
 	$(document).ready(function() 
 	{
-	
-    $('#examdate').daterangepicker({
-                "singleDatePicker": true,
-                "showDropdowns": true,
-                "startDate": '01-01-1970',
-                locale: { format: 'DD/MM/YYYY' },
-            });
+
          
+
+        var table = $('.mydatatable').DataTable();
+     
+
+        $("#expirygroup").hide()
+
 		
 	});
-		
+
+  
+  showtable()
+
+
+  function addshow()
+  {
+
+
+    document.getElementById("completename").value = ""
+    document.getElementById("username").value = ""
+    document.getElementById("marketby").value = ""
+    document.getElementById("password").value = ""
+
+
+
+    document.getElementById("completename").className = "form-control"
+    document.getElementById("username").className = "form-control"
+    document.getElementById("marketby").className = "form-control"
+    document.getElementById("password").className = "form-control"
+
+    
+
+
+    $("#modelId").modal("show")
+  }
+
+
+      
+function showtable()
+{
+  $("#loadajax").show()
+  $.post("accounts_show.php",
+  {
+    searchvalue: $("#searchtxt").val()
+  },function(result)
+  {
+   // console.log("RESULT:", result)
+    $("#loadajax").hide()
+     $("#reloadpage").empty()
+    $("#reloadpage").append(result)
+  })
+}
+
+
+function deleteshow(valueid,valuename)
+{
+  let myid = valueid
+  Swal.fire({
+    title: 'Do you want to Delete ? ' + valuename,
+    text: 'it wont be reverted',
+    icon: 'info',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Delete'
+  }).then((result) => {
+    if (result.isConfirmed) {
+
+      $.post("accounts_delete.php",{
+        id: myid
+      },function(result)
+      {
+        if(result==1)
+        {
+         showtable() 
+        }
+        else 
+        {
+          console.log(result)
+        }
+      }
+    )
+
+
+
+    }
+  })
+
+
+}
 		
 		
 		
@@ -109,7 +192,7 @@ function deleteme(classnotext)
 { 
 
 swal.fire({
-  title: 'Delete ' + classnotext + '?',
+  title: 'Deactivate ' + classnotext + '?',
   text: "You won't be able to revert this!",
   icon: 'warning',
   showCancelButton: true,
@@ -129,8 +212,7 @@ swal.fire({
       'Your file has been deleted.',
       'success'
     )
-			$('#result').empty();
-			$('#result').append(result);
+        showtable()
 		
 	});
   }
@@ -147,42 +229,99 @@ document.getElementById("titleme").value = searchresult;
 
 }
 
+
+function savedata()
+{
+  if(validation())
+  {
+      $.post("accounts_add.php",{
+      controlstatus: $("#controlstatus").val(),
+      accounttype: $("#accounttype").val(),
+      expirydate: $("#expirydate").val(),
+      completename: $("#completename").val(),
+      username: $("#username").val(),
+      marketby: $("#marketby").val(),
+      password: $("#password").val(),
+      examdate: $("#examdate").val(),
+      viewtype: $("#viewtype").val()
+      },function(result)
+      {
+        if(result==1)
+        {
+          showtable()
+        }
+        else 
+        {
+          console.log(result)
+        }
+
+      })
+  }
+}
+
+
+function validation()
+{
+  let mystring = ""
+  let proceed = true
+  
+
+  mystring = "completename"
+  if(document.getElementById(mystring).value == "")
+  {
+    proceed =false
+    document.getElementById(mystring).className = "form-control border border-danger"
+  }
+  else 
+  {
+    document.getElementById(mystring).className = "form-control"
+  }
+
+  mystring = "username"
+  if(document.getElementById(mystring).value == "")
+  {
+    proceed =false
+    document.getElementById(mystring).className = "form-control border border-danger"
+  }
+  else 
+  {
+    document.getElementById(mystring).className = "form-control"
+  }
+
+
+  mystring = "marketby"
+  if(document.getElementById(mystring).value == "")
+  {
+    proceed =false
+    document.getElementById(mystring).className = "form-control border border-danger"
+  }
+  else 
+  {
+    document.getElementById(mystring).className = "form-control"
+  }
+
+  mystring = "password"
+  if(document.getElementById(mystring).value == "")
+  {
+    proceed =false
+    document.getElementById(mystring).className = "form-control border border-danger"
+  }
+  else 
+  {
+    document.getElementById(mystring).className = "form-control"
+  }
+
+  return proceed
+}
+
+
+
+
 </script>
 
 <?php  
 include 'navbardefault.php';
 
-
-// function loadtotalquestions($viewtype, $competence)
-// {
-//   include 'dbconfig.php';
-//   $query = "Select * from preboard Where viewtype Like '". $viewtype. "' and competence Like '". $competence . "'";
-//     $datame = mysqli_query($con, $query);
-//     if(mysqli_num_rows($datame)!=0)
-//     {
-     
-//       $codecomplete = mysqli_num_rows($datame); 
-//     }
-    
-//       return $codecomplete;
-// }
-
-function lastlogin($usernameme)
-{
-  include 'dbconfig.php';
-  $codecomplete = ""; 
-  $query = "Select * from examuseraccess Where username Like '". $usernameme. "'";
-    $datame = mysqli_query($con, $query);
-    if(mysqli_num_rows($datame)!=0)
-    {
-     while ($row3 = mysqli_fetch_array($datame, MYSQLI_ASSOC)) {
-        
-      $codecomplete = $row3['lastlogin']; 
-     }
-    }
-    
-      return $codecomplete;
-}
 
 function loadusersession($username, $viewtype)
 {
@@ -201,6 +340,8 @@ function loadusersession($username, $viewtype)
     
       return $codecomplete;
 }
+
+
 
 function checkstatus($viewtype, $competence, $percenttotal , $session)
 {
@@ -237,7 +378,7 @@ function checkstatus($viewtype, $competence, $percenttotal , $session)
   <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
+            <h5 class="modal-title">Add Enrollment</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -248,30 +389,61 @@ function checkstatus($viewtype, $competence, $percenttotal , $session)
         <div class="form-group margin-top: 10px;">
            <label for="accesstype">Select Question Limit</label>
             <select class="form-control" id="controlstatus" name="controlstatus" style="font-weight: bold; color:#000;">
-                <option class="form-control" value="80">80%</option>
-                  <option class="form-control" value="100">100%</option>
+            <option class="form-control" value="10">10%</option>
+            <option class="form-control" value="20">20%</option>
+            <option class="form-control" value="30">30%</option>
+            <option class="form-control" value="40">40%</option>
+            <option class="form-control" value="50">50%</option>
+            <option class="form-control" value="60">60%</option>      
+            <option class="form-control" value="70">70%</option>      
+            <option class="form-control" value="80">80%</option>      
+            <option class="form-control" value="90">90%</option>
+                  <option class="form-control" value="100" selected>100%</option>
                 <option class="form-control" value="trial">trial</option>
             </select> 
-    </div>
-            
+        </div>
+
+        <div class="form-group">
+          <label for="accounttype">Type of Account</label>
+          <select class="form-control" id="accounttype">
+            <option value="offline">OFFLINE</option>
+            <option value="online">ONLINE</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="expirygroup">
+          <label for="expirydate">Expiry Date</label>
+          <input type="text"
+            class="form-control" name="" id="expirydate" aria-describedby="helpId" placeholder="">
+        </div>
+
+        
+        <div class="form-group">
+           <label for="examdate">Select Exam Date</label>
+          <input type="text" class="form-control" id="examdate" name="examdate" placeholder="Enter the Exam Date" Required>
+          </div>
+
+
             <div class="form-group">
                 <label for="completename">Complete name</label>
-                <input type="text" class="form-control" id="question" name="completename" placeholder="Enter your CompleteName here" Required>
+                <input type="text" class="form-control" id="completename" placeholder="Enter your CompleteName here" Required>
             </div>
             <div class="form-group">
                 <label for="username">Username (Optional)</label>
                 <input type="text" class="form-control" id="username" name="username" placeholder="Enter the Username here" Required>
             </div>
+
+            <div class="form-group">
+              <label for="marketby">Market By</label>
+              <input type="text"
+                class="form-control" id="marketby" aria-describedby="helpId" placeholder="Ex. Sorsogon Marketing">
+            </div>
+
             <div class="form-group">
                 <label for="password">Activation Code</label>
                 <input type="text" class="form-control" id="password" name="password" placeholder="Your Activation Code" Required>
             </div>
 
-
-             <div class="form-group">
-           <label for="examdate">Select Exam Date</label>
-          <input type="text" class="form-control" id="examdate" name="examdate" placeholder="Enter the Exam Date" Required>
-          </div>
 
      <div class="form-group">
            <label for="viewtype">Select Type</label>
@@ -281,48 +453,12 @@ function checkstatus($viewtype, $competence, $percenttotal , $session)
               <option class="form-control" value="Engine Management Level"> Engine Management Level</option>
              <option class="form-control" value="Deck Operational Level"> Deck Operational Level</option>
             <option class="form-control" value="Engine Operational Level"> Engine Operational Level</option>
-   
             </select> 
        </div>
 
-     <div class="form-group">
-           <label for="accesstype">Select Access</label>
-            <select class="form-control" id="accesstype" name="accesstype" style="font-weight: bold; color:#000;">
-                  <option class="form-control" value="Exam and Preview">Exam and Preview</option>
-                  <option class="form-control" value="Review Only">Review Only</option>
-                  <option class="form-control" value="Review Only">Exam Only</option>
-            </select> 
-       </div>
-  
 
   
-       <div class="form-group">
-           <label for="usertype">Select User Type</label>
-          <select class="form-control" id="usertype" name="usertype" style="font-weight: bold; color:#000;">
-                <option class="form-control" value="Trainee User">Trainee User</option>
-                <option class="form-control" value="Administrator">Administrator</option>
-           </select> 
-        </div>
-  
-         <div class="form-group">
-            <label for="expirymonths">Select Expiry Months</label>
-            <select class="form-control" id="expirymonths" name="expirymonths" style="font-weight: bold; color:#000;">
-                <option class="form-control" value="Never">Never</option>
-                  <option class="form-control" value="1">1</option>
-                <option class="form-control" value="2">2</option>
-                  <option class="form-control" value="3">3</option>
-                  <option class="form-control" value="4">4</option>
-                    <option class="form-control" value="5">5</option>
-                  <option class="form-control" value="6">6</option>
-                    <option class="form-control" value="7">7</option>
-                    <option class="form-control" value="8">8</option>
-                      <option class="form-control" value="9">9</option>
-                    <option class="form-control" value="10">10</option>
-                      <option class="form-control" value="11">11</option>
-                      <option class="form-control" value="12">12</option>
-              </select>   
-        </div>
-
+      
 
 
 
@@ -330,14 +466,16 @@ function checkstatus($viewtype, $competence, $percenttotal , $session)
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-primary" onclick="savedata()">Save</button>
       </div>
     </div>
   </div>
 </div>
 
 
-<div class="container">
+<body>
+  
+<div class="container-fluid" style="padding-left: 40px; padding-right: 40px;" >
 
 <div class="row" style="margin-top: 20px;">
     <div class="col-md-offset-2 col-md-8">
@@ -346,17 +484,58 @@ function checkstatus($viewtype, $competence, $percenttotal , $session)
 </div>
 
 <div class="row" style="margin-top: 10px;">
-   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modelId">Activate New Account</button>
+   <button type="button" class="btn btn-success" onclick="addshow()">Activate New Account</button>
+</div>
+
+<div class="row" style="margin-top: 20px;">
+  
+
+    <div class="col-5" style="margin-left: -20px">
+
+        <div class="form-group">
+          <label for="searchtxt">Search</label>
+          <input type="text"
+            class="form-control bg-warning"  id="searchtxt" aria-describedby="helpId" placeholder="">
+        </div>
+
+    </div>
+
+
+
 </div>
 
 
 
 
-<div id="result" class="row" style="margin-top:20px">
-<?php 
-include 'accounts_show.php';
-?>
+<div class="row" style="margin-top: 10px;">
+  
 
+<table class="table table-striped table-bordered"> 
+    	
+    	<thead>
+        <tr>
+        <th> No </th>
+        <th> Registered User </th>
+        <th> Activation Code </th>
+  	    <th> Viewtype </th>
+        <th> Valid </th>
+          <th> Date Created </th>
+			 <th> App registered </th>
+			   <th> LastLogin </th>
+         <th> Expiry Date </th>
+			    <th> Access </th>
+          <th> Account </th>
+			 	 <th> FUNCTION </th>
+        </tr>
+        </thead>
+       
+        <tbody id="reloadpage">
+
+ 
+        </tbody>
+        <p  id="loadajax" >Loading <img src="image/ajax-loader.gif" alt="No loading"></p>
+
+    </table>
 
 
 </div>
@@ -365,3 +544,45 @@ include 'accounts_show.php';
     
 </div>
 
+
+
+</body>
+<script>
+
+  const expirychoose =document.getElementById("accounttype")
+  const searchtext =document.getElementById("searchtxt")
+
+  searchtext.addEventListener("change",function()
+  {
+    showtable()
+  })
+
+  expirychoose.addEventListener("change",function()
+  {
+    if(expirychoose.value =="online")
+    {
+      $("#expirygroup").show()
+
+      $('#expirydate').daterangepicker({
+                "singleDatePicker": true,
+                "showDropdowns": true,
+                locale: { format: 'MM/DD/YYYY' },
+            });
+
+    }
+    else 
+    {
+      $("#expirygroup").hide()
+    }
+  })
+
+
+             $('#examdate').daterangepicker({
+                "singleDatePicker": true,
+                "showDropdowns": true,
+                locale: { format: 'MM/DD/YYYY' },
+            });
+
+    
+
+</script>
