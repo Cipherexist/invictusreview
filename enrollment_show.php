@@ -1,21 +1,8 @@
-    	<table class="table table-striped table-bordered mydatatable" style="width: 100%"> 
-    	
-    	<thead>
-        <tr>
-        <th> No </th>
-        <th> Complete Name </th>
-        <th> Rank </th>
-        <th> Contact Number </th>
-  	    <th> Viewtype </th>
-          <th> Date Created </th>
-          <th> Account Type </th>
-			 	 <th> FUNCTION </th>
-        </tr>
-        </thead>
-        
-        <tbody>
-      <?php 
+
+  <?php 
   include 'dbconfig.php';
+  include 'loadmodules.php'; 
+
   $fetchqry  = "SELECT * FROM `enrollment` ORDER BY ID DESC"; 
   $datame1 = mysqli_query($con,$fetchqry);
  
@@ -39,21 +26,29 @@
             //  {
             //    echo "<tr style='background-color:YELLOWORANGE;'>"; 
             //  }
-            echo "<tr>"; 
-              echo "<td> ". $x . "</td>"; 
-            echo "<td> ". $row["Completename"] . "</td>"; 
-            echo "<td> ". $row["rank"] . "</td>"; 
-            echo "<td> ". $row["contactno"] . "</td>"; 
-              echo "<td> ". $row["viewtype"] . "</td>"; 
-              echo "<td> ". $row["datecreated"] . "</td>";
-              echo "<td> ". "for checking" . "</td>";
-            echo '<td>'; 
-            echo '<input type="button" id="driver" value="Info" class="btn btn-secondary btn-sm" onClick=""/>';
-            echo '<input type="button" id="driver" value="Access" class="btn btn-success btn-sm" onClick=""/>';
-            echo '</td>';
+            @$myid = $row['ID'];
+            @$totalaccounts = loadnumberofdataall("examapproved","Where `accountid` Like '$myid'")
+          ?>
+
+            <tr>
+            <td><?php echo $x ?></td> 
+            <td><?php echo $row["Completename"]; ?></td> 
+            <td><?php echo $row["rank"]; ?></td> 
+            <td><?php echo $row["contactno"]; ?></td> 
+            <td><?php echo $row["viewtype"]; ?></td> 
+            <td><?php echo $row["datecreated"]; ?></td>
+            <td><?php echo $totalaccounts; ?></td>
+            <td>
+            <input type="button" id="driver" value="Info" class="btn btn-secondary btn-sm" onClick=""/>
+            <input type="button" id="driver" value="Access" class="btn btn-success btn-sm" onClick=""/>
+            </td>
             
             
-            echo "</tr>"; 
+            </tr> 
+
+        <?php
+
+
           }
       
       }
@@ -70,9 +65,4 @@
 	
       ?> 
 
-    
-
-</tbody>
-
-
-    </table>
+ 

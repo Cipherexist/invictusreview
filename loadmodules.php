@@ -460,6 +460,34 @@ function loadregistrationdateformatdatetoday()
 }
 
 
+function loadnumberofdataall($table,$wherestr)
+{ 
+include 'dbconfig.php'; 
+
+$returnmyno = 0; 
+$query1 = "Select * from ".$table ." ".$wherestr;
+$datame = mysqli_query($con, $query1);
+	if(!mysqli_error($con))
+	{
+		if(mysqli_num_rows($datame)!=0)
+		{	
+			
+		$returnmyno = mysqli_num_rows($datame); 
+
+		}
+		else 
+		$returnmyno = 0; 
+
+	}
+	else
+	{
+		$returnmyno = mysqli_error($con);
+	}
+	return $returnmyno; 
+}
+
+
+
 function loadregistrationdatedifferential($firstregdate, $secondregdate)
 { 
 $fmyyear = 0;

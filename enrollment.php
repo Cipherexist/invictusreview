@@ -75,7 +75,23 @@ require 'forcookie2.php';
          });
 		
 	});
-		
+
+  showtable()
+  function showtable()
+{
+  $("#loadajax").show()
+  $.post("enrollment_show.php",
+  {
+    
+  },function(result)
+  {
+   console.log("RESULT:", result)
+    $("#loadajax").hide()
+     $("#reloadpage").empty()
+    $("#reloadpage").append(result)
+  })
+}
+
 		
 		
 		
@@ -130,71 +146,9 @@ document.getElementById("titleme").value = searchresult;
 <?php  
 include 'navbardefault.php';
 
+?>
 
-function loadtotalquestions($viewtype, $competence)
-{
-  include 'dbconfig.php';
-  $query = "Select * from preboard Where viewtype Like '". $viewtype. "' and competence Like '". $competence . "'";
-    $datame = mysqli_query($con, $query);
-    if(mysqli_num_rows($datame)!=0)
-    {
-     
-      $codecomplete = mysqli_num_rows($datame); 
-    }
-    
-      return $codecomplete;
-}
-
-
-
-function loadusersession($username, $viewtype)
-{
-  include 'dbconfig.php';
-  $query = "Select * from user_data Where username Like '". $username. "' and viewtype Like '". $viewtype . "'";
-    $datame = mysqli_query($con, $query);
-    if(mysqli_num_rows($datame)!=0)
-    {
-     while ($row3 = mysqli_fetch_array($datame, MYSQLI_ASSOC)) {
-        $setlimit = 10000;
-        setcookie('session',$row3['session'], time()+$setlimit);
-            $codecomplete = $row3['session']; 
-    }
-        
-}
-    
-      return $codecomplete;
-}
-
-function checkstatus($viewtype, $competence, $percenttotal , $session)
-{
-  include 'dbconfig.php';
-  $query = "Select * from `results` Where viewtype Like '".$viewtype . "' and session Like '". $session . "' and competence Like '".$competence. "' and username Like '". $_COOKIE['username'] . "' ORDER BY qno ASC";
-    $datame = mysqli_query($con, $query);
-    $corrected = 0;
-    $totalme = 0;
-    $codecomplete =0;
-    if(mysqli_num_rows($datame)!=0)
-    {
-    $totalme = mysqli_num_rows($datame); 
-    while ($row3 = mysqli_fetch_array($datame, MYSQLI_ASSOC)) {
-        if($row3['status']=="PASSED")
-        {
-         $corrected += 1 ;
-        }
-    }
-
-    }
-      if($corrected >0)
-      {
-        $codecomplete = ($corrected/$totalme) * 100; 
-      }
-
-      return $codecomplete;
-}
-
-
-?> 
-<div class="container">
+<div class="container-fluid">
 
 <div class="row">
     <div class="col-md-offset-2 col-md-8">
@@ -204,30 +158,33 @@ function checkstatus($viewtype, $competence, $percenttotal , $session)
         </div>
         </form>
     </div>
-     </div>
-	 <?php if(isset($_POST['submit'])){
-$fetchqry = "SELECT * FROM `quiz`";
-$result=mysqli_query($con,$fetchqry);
-$num=mysqli_num_rows($result);
-@$id = $num + 1;
-@$que = $_POST['question'];
-@$ans = $_POST['correct_answer'];
-@$wans1 = $_POST['wrong_answer1'];
-@$wans2 = $_POST['wrong_answer2'];
-@$wans3 = $_POST['wrong_answer3']; 
-$qry = "INSERT INTO `quiz`(`id`, `que`, `option 1`, `option 2`, `option 3`, `option 4`, `ans`) VALUES ($id,'$que','$ans','$wans1','$wans2','$wans3','$ans')";
-$done = mysqli_query($con,$qry);
-if($done==TRUE){
-	echo "Question and Answers Sumbmitted Succesfully";
-}
-	 }
-?>
+</div>
+	 
+
+<div id="result" class="row" style="padding-left: 30px; padding-right:30px; margin-top: 10px;">
+
+<table class="table table-striped table-bordered" > 
+    	
+    	<thead>
+        <tr>
+        <th> No </th>
+        <th> Complete Name </th>
+        <th> Rank </th>
+        <th> Contact Number </th>
+  	    <th> Viewtype </th>
+          <th> Date Created </th>
+          <th> No. of Accounts </th>
+			 	 <th> FUNCTION </th>
+        </tr>
+        </thead>
+        
+        <tbody id="reloadpage" >
+        </tbody>
+        <p  id="loadajax" >Loading <img src="image/ajax-loader.gif" alt="No loading"></p>
 
 
-<div id="result" class="row" style="margin-top:20px">
-<?php 
-include 'enrollment_show.php';
-?>
+    </table>
+
 
 
 
