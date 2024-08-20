@@ -15,27 +15,7 @@ require 'forcookie2.php';
     <meta name="author" content="Val Okafor">   
     <title>Account Management</title>
 
-    <!-- Bootstrap core CSS -->
 
-    <!-- Custom styles for this template -->
-    
-    <!--
-    <link href="css/theme.css" rel="stylesheet">
-   	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-   	<link href="css/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap-theme.css">
-   	-->
- <!--
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="js/jquery.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/jquery.js"></script>
-  <script src="js/jquery-1.10.2.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  -->
 
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
@@ -248,6 +228,7 @@ function savedata()
       {
         if(result==1)
         {
+          $("#modelId").modal("hide")
           showtable()
         }
         else 
